@@ -9,13 +9,13 @@
 #   ALL_MDM_LIBRARY_API_KEY    chave para a biblioteca de integração
 #
 # A versão fica no arquivo ALL_VERSION (ex.: 6.40-all.1).
-# - Todo push na branch "all-branding" compila e guarda o APK como artefato do workflow.
+# - Todo push na branch "all/main" compila e guarda o APK como artefato do workflow.
 # - Se ainda não existir release para a versão do ALL_VERSION, cria a tag v<versão> e publica o APK.
 name: Build ALL MDM agent
 
 on:
   push:
-    branches: [all-branding]
+    branches: [all/main]
   workflow_dispatch:
 
 permissions:
