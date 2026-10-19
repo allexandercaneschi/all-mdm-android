@@ -168,10 +168,12 @@ android {
         // Pacote próprio: não substitui nem atualiza o app da Headwind.
         alltec {
             applicationId "br.com.alltecnologias.mdm"
-            // versionCode = versão da Headwind x 100 + revisão da ALL (o "n" da tag v<versão>-all.<n>),
-            // para que correções só da ALL também cheguem aos celulares como atualização
-            versionCode android.defaultConfig.versionCode * 100 + (System.getenv("ALL_MDM_REVISION") ?: "0").toInteger()
-            versionNameSuffix "-all." + (System.getenv("ALL_MDM_REVISION") ?: "0")
+            // Versão da ALL (arquivo ALL_VERSION, formato X.Y.Z). versionCode = X*1000000 + Y*1000 + Z,
+            // então toda versão nova da ALL é maior que a anterior e chega aos celulares como atualização
+            def allVersion = rootProject.file("ALL_VERSION").text.trim()
+            def (vMajor, vMinor, vPatch) = allVersion.tokenize(".").collect { it.toInteger() }
+            versionName allVersion
+            versionCode vMajor * 1000000 + vMinor * 1000 + vPatch
             buildConfigField("String", "BASE_URL", "\"https://mdm.alltecnologias.com.br\"")
             buildConfigField("String", "SECONDARY_BASE_URL", "\"https://mdm.alltecnologias.com.br\"")
             // O servidor já vem definido; não pergunta a URL no primeiro uso

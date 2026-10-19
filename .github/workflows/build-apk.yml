@@ -8,7 +8,7 @@
 #   ALL_MDM_SHARED_SECRET      igual ao SHARED_SECRET do servidor (stack do all-mdm)
 #   ALL_MDM_LIBRARY_API_KEY    chave para a biblioteca de integração
 #
-# A versão fica no arquivo ALL_VERSION (ex.: 6.40-all.1).
+# A versão da ALL fica no arquivo ALL_VERSION (formato X.Y.Z, ex.: 1.0.0).
 # - Todo push na branch "all/main" compila e guarda o APK como artefato do workflow.
 # - Se ainda não existir release para a versão do ALL_VERSION, cria a tag v<versão> e publica o APK.
 name: Build ALL MDM agent
@@ -51,7 +51,11 @@ jobs:
         run: |
           VERSION=$(tr -d ' \r\n' < ALL_VERSION)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "ALL_MDM_REVISION=${VERSION##*-all.}" >> "$GITHUB_ENV"
+          echo "base=$(grep -m1 'versionName "' app/build.gradle | sed 's/.*versionName "\(.*\)"/\1/')" >> "$GITHUB_OUTPUT"
+          if ! echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::ALL_VERSION deve ter o formato X.Y.Z (ex.: 1.0.0). Encontrado: $VERSION"
+            exit 1
+          fi
           if gh release view "v$VERSION" -R "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             echo "release=false" >> "$GITHUB_OUTPUT"
           else
@@ -83,6 +87,9 @@ jobs:
         with:
           tag_name: v${{ steps.ver.outputs.version }}
           target_commitish: ${{ github.sha }}
-          name: ALL MDM agente ${{ steps.ver.outputs.version }}
+          name: ALL MDM agente v${{ steps.ver.outputs.version }}
+          body: |
+            Agente Android **ALL MDM** v${{ steps.ver.outputs.version }} (pacote `br.com.alltecnologias.mdm`).
+            Base: Headwind MDM ${{ steps.ver.outputs.base }}.
           files: dist/*
           generate_release_notes: true
