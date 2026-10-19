@@ -45,8 +45,9 @@ Cadastre em **Settings → Secrets and variables → Actions** do repositório:
 
 ## Gerar uma versão
 
-1. Crie a tag `v<versão-headwind>-all.<n>`, por exemplo `v6.40-all.1`, e envie para o GitHub.
-2. O GitHub Actions publica `all-mdm-agent-6.40-all.1.apk` no Releases.
+1. Altere o arquivo `ALL_VERSION` (formato `<versão-headwind>-all.<n>`, ex.: `6.40-all.2`) e faça push na branch `all-branding`.
+2. O GitHub Actions compila, assina, cria a tag `v6.40-all.2` e publica `all-mdm-agent-6.40-all.2.apk` no Releases.
+   Pushes que não mudam o `ALL_VERSION` só compilam (o APK fica como artefato do workflow, para teste).
 3. No painel: **Aplicativos → ALL MDM → Adicionar versão**, envie o APK e escolha a versão
    nova nas configurações. Os celulares atualizam sozinhos.
 
@@ -56,8 +57,8 @@ Para compilar na sua máquina: `./gradlew assembleAlltecRelease` (com as variáv
 
 1. No GitHub, use **Sync fork** na branch `master`.
 2. Faça merge de `master` em `all-branding` (conflitos só aparecem se a Headwind mexer no bloco `productFlavors`).
-3. Gere uma tag nova.
+3. Suba o número em `ALL_VERSION` e faça push.
 
-O `versionCode` do agente é o da Headwind × 100 + o número da revisão ALL (o `n` da tag).
+O `versionCode` do agente é o da Headwind × 100 + o número da revisão ALL (o `n` do `ALL_VERSION`).
 Assim, tanto uma versão nova da Headwind quanto uma correção só da ALL (`-all.2`, `-all.3`…)
 sempre ficam maiores que a anterior e chegam aos celulares como atualização.
