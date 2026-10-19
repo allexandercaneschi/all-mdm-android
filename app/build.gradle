@@ -114,6 +114,19 @@ android {
         // (this option is banned by Play Protect in some countries!)
         buildConfigField("Boolean", "USE_ACCESSIBILITY", "false")
     }
+    // ALL MDM: assinatura do APK com a chave da ALL Tecnologias.
+    // A chave fica fora do repositório; o build lê o caminho e as senhas das variáveis de ambiente
+    // ALL_MDM_KEYSTORE, ALL_MDM_KEYSTORE_PASSWORD, ALL_MDM_KEY_ALIAS e ALL_MDM_KEY_PASSWORD.
+    signingConfigs {
+        alltec {
+            if (System.getenv("ALL_MDM_KEYSTORE")) {
+                storeFile file(System.getenv("ALL_MDM_KEYSTORE"))
+                storePassword System.getenv("ALL_MDM_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("ALL_MDM_KEY_ALIAS")
+                keyPassword System.getenv("ALL_MDM_KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -150,6 +163,26 @@ android {
 
     productFlavors {
         opensource { }
+
+        // ALL MDM: agente com a marca da ALL Tecnologias (recursos em app/src/alltec/res).
+        // Pacote próprio: não substitui nem atualiza o app da Headwind.
+        alltec {
+            applicationId "br.com.alltecnologias.mdm"
+            // versionCode = versão da Headwind x 100 + revisão da ALL (o "n" da tag v<versão>-all.<n>),
+            // para que correções só da ALL também cheguem aos celulares como atualização
+            versionCode android.defaultConfig.versionCode * 100 + (System.getenv("ALL_MDM_REVISION") ?: "0").toInteger()
+            versionNameSuffix "-all." + (System.getenv("ALL_MDM_REVISION") ?: "0")
+            buildConfigField("String", "BASE_URL", "\"https://mdm.alltecnologias.com.br\"")
+            buildConfigField("String", "SECONDARY_BASE_URL", "\"https://mdm.alltecnologias.com.br\"")
+            // O servidor já vem definido; não pergunta a URL no primeiro uso
+            buildConfigField("Boolean", "REQUEST_SERVER_URL", "false")
+            // Segredos iguais aos do servidor (SHARED_SECRET no .env do all-mdm)
+            buildConfigField("String", "REQUEST_SIGNATURE", "\"" + (System.getenv("ALL_MDM_SHARED_SECRET") ?: "changeme-C3z9vi54") + "\"")
+            buildConfigField("String", "LIBRARY_API_KEY", "\"" + (System.getenv("ALL_MDM_LIBRARY_API_KEY") ?: "changeme-8gzk321W") + "\"")
+            if (System.getenv("ALL_MDM_KEYSTORE")) {
+                signingConfig signingConfigs.alltec
+            }
+        }
     }
 }
 

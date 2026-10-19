@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ALL MDM: textos da marca ALL Tecnologias (sobrescrevem app/src/main/res) -->
+<resources>
+    <string name="white_app_name" translatable="false">ALL MDM</string>
+    <string name="app_name" translatable="false">ALL MDM</string>
+    <string name="vendor" translatable="false">ALL Tecnologias</string>
+    <string name="dialog_manage_storage_title">Please allow the app to manage storage.\n\nThis option allows ALL MDM to manage files on your device.</string>
+</resources>

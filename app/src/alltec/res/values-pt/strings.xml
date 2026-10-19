@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ALL MDM: textos em português do Brasil -->
+<resources>
+    <string name="dialog_manage_storage_title">Permita que o aplicativo gerencie o armazenamento.\n\nIsso permite que o ALL MDM gerencie arquivos no seu aparelho.</string>
+</resources>

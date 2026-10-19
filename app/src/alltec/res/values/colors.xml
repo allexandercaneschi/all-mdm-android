@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ALL MDM: cores da ALL Tecnologias (sobrescrevem app/src/main/res/values/colors.xml) -->
+<resources>
+    <color name="colorPrimary">#35A8E0</color>
+    <color name="colorPrimaryDark">#0B1220</color>
+    <color name="colorAccent">#35A8E0</color>
+    <color name="defaultBackground">#0B1220</color>
+    <color name="wizardPrimaryDark">#FF1B6F9C</color>
+    <color name="wizardPrimary">#FF35A8E0</color>
+    <color name="wizardAccent">#FF1B6F9C</color>
+</resources>
